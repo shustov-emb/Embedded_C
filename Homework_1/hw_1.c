@@ -109,7 +109,7 @@ int main() {
 	int scan_result = 0;
 
 	while (scan_result != 1) {
-		printf("input integer: ");
+		printf("Целое число: ");
 
 		scan_result = scanf("%d", &input);
 				
@@ -119,7 +119,7 @@ int main() {
 	}
 	scan_result = 0;
 	while (scan_result != 1) {
-		printf("input replacement 0-255 : ");
+		printf("Замена (0-255): ");
 		scan_result = scanf("%u", &replacement);
 		if (replacement < 0 || replacement > 255) scan_result = 0;
 
@@ -127,10 +127,9 @@ int main() {
 		while (getchar() != '\n');
 	}
 
-	printf("\n1.\t\t");binary_representation(input);
-	printf("\n2.\t\t");binary_negative(input);
-	printf("\n3.\t\t");binary_ones_count(input);
-	printf("\n4.\t");change_third_byte(input, replacement);
-	printf("\n");
+	printf("\n1.Вывести двоичное представление целого положительного числа\n\t\t");binary_representation(input);printf("\n");
+	printf("\n2.Вывести двоичное представление целого отрицательного числа.\t\t");binary_negative(input);printf("\n");
+	printf("\n3.Найти количество единиц в двоичном представлении целого положительного числа\n\t\t");binary_ones_count(input);printf("\n");
+	printf("\n4.Поменять в целом положительном числе(типа int) значение третьего байта на введенное пользователем число\t");change_third_byte(input, replacement);printf("\n");
 }
 
