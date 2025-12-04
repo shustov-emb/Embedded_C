@@ -110,20 +110,16 @@ int main() {
 
 	while (scan_result != 1) {
 		printf("Целое число: ");
-
 		scan_result = scanf("%d", &input);
-				
-		if (replacement < 0 || replacement > 255) scan_result = 0;
 		//Про чистку буфера я не знал, этот способ был взят из интернета
 		while (getchar() != '\n');
 	}
+	
 	scan_result = 0;
 	while (scan_result != 1) {
 		printf("Замена (0-255): ");
 		scan_result = scanf("%u", &replacement);
 		if (replacement < 0 || replacement > 255) scan_result = 0;
-
-		//Про чистку буфера я не знал, этот способ был взят из интернета
 		while (getchar() != '\n');
 	}
 
