@@ -24,4 +24,4 @@ run_tests: tests
 clean:
 	rm -f hw3_runner test_runner *.o
 
-.PHONY: all app tests run_tests clean
+.PHONY: all run app tests run_tests clean

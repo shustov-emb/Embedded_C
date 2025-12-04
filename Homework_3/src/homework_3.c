@@ -42,7 +42,7 @@ void task_2_pointer_change_code()
 	printf("Результат: %f\n", *xp + *yp);
 }
 
-void task_3_pinter_print_array()
+void task_3_pointer_print_array()
 {
 	int array[10];
 	int SIZE = sizeof(array) / sizeof(array[0]);
@@ -51,13 +51,14 @@ void task_3_pinter_print_array()
 	{
 		*(array + i) = i+1;
 	}
-		for (int i = 0; i < 10; i++)
+	
+	for (int i = 0; i < 10; i++)
 	{
 		printf("%d ",*(array+i));
 	}
 }
 
-char *task_4_find_substring(char* input_string, char* input_substring)
+char *task_4_pointer_find_substring(char* input_string, char* input_substring)
 {
 	char *current_str_ptr = input_string;
 	char *sub_ptr;
@@ -68,7 +69,9 @@ char *task_4_find_substring(char* input_string, char* input_substring)
 		sub_ptr = input_substring;
 		match_length = 0;
 
-		while (*(current_str_ptr + match_length) != '\0' && *sub_ptr != '\0' && *(current_str_ptr + match_length) == *sub_ptr)
+		while (*(current_str_ptr + match_length) != '\0' 
+		&& *sub_ptr != '\0' 
+		&& *(current_str_ptr + match_length) == *sub_ptr)
 		{
 			match_length++;
 			sub_ptr++;
