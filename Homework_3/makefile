@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99
-UNITY_SRC = unity/unity.c
+UNITY_SRC = unity_tests/unity.c
 
 HW3_INC = src
 HW3_SOURCE = src/homework_3.c
