@@ -35,7 +35,7 @@ int main()
 	task_2_pointer_change_code();
     
     printf("\n\n3. Используйте указатель для вывода элементов массива на консоль\n\t");
-	task_3_pinter_print_array();
+	task_3_pointer_print_array();
 
 	printf("\n\n4.Напишите программу, которая ищет введенной строке введенную подстроку\n");
 	// const int SIZE = 1000;
@@ -58,7 +58,7 @@ int main()
 		while (getchar() != '\n');
 	}
 
-	char* result = task_4_find_substring(abs, input_substring);
+	char* result = task_4_pointer_find_substring(abs, input_substring);
 	if (result != NULL)
 		printf("\tfirst letter of substring: %c\n", *result);
 }

@@ -74,7 +74,7 @@ void change_third_byte(int input, int replacement) {
 	printf("\n replacement:\t");
 	binary_representation(replacement);
 
-	int mask = ~(255 << 16);;
+	int mask = ~(255 << 16);
 	input &= mask;
 	replacement <<= 16;
 	int result_mask = replacement | input;
@@ -123,9 +123,13 @@ int main() {
 		while (getchar() != '\n');
 	}
 
-	printf("\n1.Вывести двоичное представление целого положительного числа\n\t\t");binary_representation(input);printf("\n");
-	printf("\n2.Вывести двоичное представление целого отрицательного числа.\t\t");binary_negative(input);printf("\n");
-	printf("\n3.Найти количество единиц в двоичном представлении целого положительного числа\n\t\t");binary_ones_count(input);printf("\n");
-	printf("\n4.Поменять в целом положительном числе(типа int) значение третьего байта на введенное пользователем число\t");change_third_byte(input, replacement);printf("\n");
+	printf("\n1.Вывести двоичное представление целого положительного числа\n\t\t");
+	binary_representation(input);printf("\n");
+	printf("\n2.Вывести двоичное представление целого отрицательного числа.\t\t");
+	binary_negative(input);printf("\n");
+	printf("\n3.Найти количество единиц в двоичном представлении целого положительного числа\n\t\t");
+	binary_ones_count(input);printf("\n");
+	printf("\n4.Поменять в целом положительном числе(типа int) значение третьего байта на введенное пользователем число\t");
+	change_third_byte(input, replacement);printf("\n");
 }
 
