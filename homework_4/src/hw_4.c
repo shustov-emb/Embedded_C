@@ -1,34 +1,34 @@
 #include <stdio.h>
 #include "hw_4.h"
 
-void erase_char_array(char *charArray)
+void EraseCharArray(char *char_array)
 {
-    for (int i = 0; i < stringSize; i++)
+    for (int i = 0; i < STRING_SIZE; i++)
     {
-        charArray[i] = 0;
+        char_array[i] = 0;
     }
 };
 
-void erase_structure(struct subscriber *subscriber)
+void EraseStructure(struct Subscriber *subscriber)
 {
-    erase_char_array(subscriber->name);
-    erase_char_array(subscriber->second_name);
-    erase_char_array(subscriber->phoneNumber);
-    subscriber->notEmpty = 0;
+    EraseCharArray(subscriber->name);
+    EraseCharArray(subscriber->second_name);
+    EraseCharArray(subscriber->phone_number);
+    subscriber->not_empty = 0;
     
 };
 
-void get_string(const char *message, char *buffer, int bufferSize)
+void GetString(const char *message, char *buffer)
 {
 
-    char *scanResult = 0;
+    char *scan_result = 0;
     int length = 0;
 
     printf("\tEnter %s: ", message);
 
-    scanResult = fgets(buffer, stringSize, stdin);
+    scan_result = fgets(buffer, STRING_SIZE, stdin);
 
-    if (scanResult != NULL)
+    if (scan_result != NULL)
     {
         while (buffer[length] != '\0')
         {
@@ -40,7 +40,7 @@ void get_string(const char *message, char *buffer, int bufferSize)
             buffer[length - 1] = '\0';
         }
 
-        else if (length == stringSize - 1 && buffer[stringSize - 2] != '\n')
+        else if (length == STRING_SIZE - 1 && buffer[STRING_SIZE - 2] != '\n')
         {
             while (getchar() != '\n')
                 ;
@@ -48,10 +48,10 @@ void get_string(const char *message, char *buffer, int bufferSize)
     }
 };
 
-int strcompare(char *str1, char *str2)
+int StrCompare(char *str1, char *str2)
 {
 
-    for (int i = 0; i < stringSize; i++)
+    for (int i = 0; i < STRING_SIZE; i++)
     {
         if (str1[i] != str2[i])
         {
@@ -61,16 +61,16 @@ int strcompare(char *str1, char *str2)
     return 1;
 };
 
-void add_subscriber(struct subscriber array[])
+void AddSubscriber(struct Subscriber array[])
 {
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < ARRAY_SIZE; i++)
     {
-        if (!array[i].notEmpty)
+        if (!array[i].not_empty)
         {
-            array[i].notEmpty = 1;
-            get_string("name", array[i].name, stringSize);
-            get_string("second name", array[i].second_name, stringSize);
-            get_string("phone number", array[i].phoneNumber, stringSize);
+            array[i].not_empty = 1;
+            GetString("name", array[i].name);
+            GetString("second name", array[i].second_name);
+            GetString("phone number", array[i].phone_number);
             return;
         }
     }
@@ -78,19 +78,19 @@ void add_subscriber(struct subscriber array[])
     printf("Subscriber limit reached!\n");
 };
 
-void delete_subscriber(struct subscriber array[])
+void DeleteSubscriber(struct Subscriber array[])
 {
 
     int input = 0;
     int scan_result = 0;
 
-    if (array[0].notEmpty != 1)
+    if (array[0].not_empty != 1)
     {
         printf("Nothing to delete!\n");
         return;
     }
 
-    while (scan_result == 0 || (input >= arraySize && input < 0))
+    while (scan_result == 0 || (input >= ARRAY_SIZE && input < 0))
     {
         printf("\tEnter user number: ");
         scan_result = scanf("%d", &input);
@@ -98,35 +98,35 @@ void delete_subscriber(struct subscriber array[])
             ;
     }
 
-    for (int i = input - 1; i < arraySize - 1; i++)
+    for (int i = input - 1; i < ARRAY_SIZE - 1; i++)
     {
         array[i] = array[i + 1];
     }
 
-    erase_structure(&array[arraySize - 1]);
+    EraseStructure(&array[ARRAY_SIZE - 1]);
 };
 
-void print_subscribers(struct subscriber array[], char *nameToFind)
+void PrintSubscribers(struct Subscriber array[], char *name_to_find)
 {
 
-    int searchFilter = 0;
+    int search_filter = 0;
 
-    if (nameToFind == NULL || *nameToFind == '\0')
-        searchFilter = 0;
+    if (name_to_find == NULL || *name_to_find == '\0')
+        search_filter = 0;
     else
-        searchFilter = 1;
+        search_filter = 1;
 
-    for (int i = 0; i <= arraySize; i++)
+    for (int i = 0; i <= ARRAY_SIZE; i++)
     {
-        if (array[i].notEmpty)
+        if (array[i].not_empty)
         {
-            if (!searchFilter || strcompare(nameToFind, array[i].name))
+            if (!search_filter || StrCompare(name_to_find, array[i].name))
             {
                     printf("\nNumber:\t\t%d\nName:\t\t%s\nSecond name:\t%s\nPhone number:\t%s\n",
                            i + 1,
                            array[i].name,
                            array[i].second_name,
-                           array[i].phoneNumber);
+                           array[i].phone_number);
             }
         }
     }
