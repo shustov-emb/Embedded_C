@@ -1,16 +1,14 @@
 CXX=gcc
 CXXFLAGS=-c -Wall
-LDFLAGS=
-LDLIBS=
 
 SOURCES=$(wildcard src/*.c)
 OBJECTS=$(patsubst src/%.c,%.o,$(SOURCES))
-EXECUTABLE=app
+EXECUTABLE=runner
 
-all: $(EXECUTABLE)
+all: run
 
 $(EXECUTABLE): $(OBJECTS) 
-	$(CXX) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
+	$(CXX) $(OBJECTS) -o $@
 
 %.o: src/%.c
 	$(CXX) $(CXXFLAGS) $< -o $@
