@@ -6,7 +6,7 @@
  * @date 2025-12-10
  */
 #include <stdio.h>
-#include "hw_4.h"
+#include "homework_4.h"
 
 void EraseCharArray(char *char_array)
 {
@@ -17,6 +17,15 @@ void EraseCharArray(char *char_array)
     }
 };
 
+void CopyArray(char *src, char *dst)
+{
+    //Цикл пожлементно копирующий один массив символов в другой
+    for (int i = 0; i < STRING_SIZE; i++)
+    {
+        dst[i] = src[i];
+    }
+}
+
 void EraseStructure(struct Subscriber *subscriber)
 {
     // Передаём символьные массивы с данными структуру, для того чтобы их обнулить!
@@ -25,6 +34,15 @@ void EraseStructure(struct Subscriber *subscriber)
     EraseCharArray(subscriber->phone_number);
     subscriber->not_empty = 0; // Удаем метку о заполненности массива
 };
+
+void CopyStructure(struct Subscriber *src, struct Subscriber *dst)
+{
+
+    CopyArray(src->name, dst->name);
+    CopyArray(src->second_name, dst->second_name);
+    CopyArray(src->phone_number, dst->phone_number);
+    dst->not_empty = src->not_empty;
+}
 
 void GetString(const char *message, char *buffer)
 {
@@ -121,6 +139,7 @@ void DeleteSubscriber(struct Subscriber array[])
         // Смещаем массив влево на место удалённой пользователем ячейки
         for (int i = input - 1; i < ARRAY_SIZE - 1; i++)
         {
+            //CopyStructure(&array[i+1],&array[i]);
             array[i] = array[i + 1];
         }
 
@@ -132,7 +151,7 @@ void DeleteSubscriber(struct Subscriber array[])
 void PrintSubscribers(struct Subscriber array[], char *name_to_find)
 {
 
-    int search_filter = 0; 
+    int search_filter = 0;
 
     // Если фильтр по имени будет пустым, то будем выводить все записи!
     if (name_to_find == NULL || *name_to_find == '\0')
@@ -145,14 +164,14 @@ void PrintSubscribers(struct Subscriber array[], char *name_to_find)
         // На всякий случай пропускаем пустые структуры в массиве
         if (array[i].not_empty)
         {
-            
+
             /* Условие вывода записи на экран.
-             * 
+             *
              * Запись будет напечатана в двух случаях:
              * 1. Фильтр по имени отключен (!search_filter истинно).
              * 2. Фильтр по имени включен, и при этом имя текущего абонента совпадает с искомым именем (результат StrCompare ненулевой).
              */
-            
+
             if (!search_filter || StrCompare(name_to_find, array[i].name))
             {
                 printf("\nNumber:\t\t%d\nName:\t\t%s\nSecond name:\t%s\nPhone number:\t%s\n",

@@ -7,7 +7,7 @@
  */
 #include <stdio.h>
 #include <locale.h>
-#include "hw_4.h"
+#include "homework_4.h"
 
 /**
  * @brief В основной функции программы, мы выводим меню спрашиваем пользователя выбрать действие

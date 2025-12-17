@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "stdio.h": "c",
-        "locale.h": "c",
-        "typeinfo": "c",
-        "hw_4.h": "c"
-    }
-}

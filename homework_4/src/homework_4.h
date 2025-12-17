@@ -31,11 +31,27 @@ struct Subscriber
 void EraseCharArray(char *char_array);
 
 /**
+ * @brief Вспомогательная функция которая копирует массив символов из src в dst
+ * 
+ * @param[in,out] src Массив источника
+ * @param[in,out] dst Массив получателя
+ */
+void CopyArray(char *src, char *dst);
+
+/**
  * @brief Вспомогательна функция которая затирает структуру нулями
  * 
  * @param[in,out] subscriber Указатель на структуру которую надо обнулить
  */
 void EraseStructure(struct Subscriber *subscriber);
+
+/**
+ * @brief Вспомогательная функция которая копирует структуру src в dst
+ * 
+ * @param[in,out] src Структура источника
+ * @param[in,out] dst Структура получателя
+ */
+void CopyStructure(struct Subscriber *src, struct Subscriber *dst);
 
 /**
  * @brief Вспомогательна функция которая позволяет получить и обработать вводимую пользователем строку (массив символов)
