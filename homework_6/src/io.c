@@ -1,14 +1,3 @@
-/**
- * @file io.c
- * @author Шустов Александр
- * @brief Исходный код реализации вспомогательных методов пользовательского ввода/вывода 
- * @version 0.1
- * @date 2026-02-02
- * 
- * @copyright Copyright (c) 2026
- * 
- */
-
 #include <malloc.h> 
 #include <stdio.h>
 #include <stdlib.h>
