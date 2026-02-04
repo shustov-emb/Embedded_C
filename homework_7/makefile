@@ -9,11 +9,10 @@ LIB_DIR = lib
 SOURCES = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 
+LIB_NAME = libcalc.a #Имя библиотеки
+LIB_SHORT_NAME = $(patsubst lib%,%,$(basename $(LIB_NAME))) #Короткое имя библиотеки для -l
+LIB_OBJECTS = $(filter-out $(OBJ_DIR)/main.o, $(OBJECTS)) #Берём все исходные файлы кроме main.c
 
-LIB_SHORT_NAME = $(patsubst lib%,%,$(basename $(LIB_NAME)))
-LIB_OBJECTS = $(filter-out $(OBJ_DIR)/main.o, $(OBJECTS))
-
-LIB_NAME = libcalc.a
 EXECUTABLE = runner
 
 
@@ -22,6 +21,7 @@ all: $(LIB_DIR)/$(LIB_NAME) $(EXECUTABLE)
 $(EXECUTABLE): $(OBJ_DIR)/main.o $(LIB_DIR)/$(LIB_NAME)
 	$(CXX) $(OBJ_DIR)/main.o -L$(LIB_DIR) -l$(LIB_SHORT_NAME) -o $@
 
+# Создаём библиотеку в папке lib
 $(LIB_DIR)/$(LIB_NAME): $(LIB_OBJECTS)
 	@mkdir -p $(LIB_DIR)
 	ar rc $@ $^
@@ -34,6 +34,7 @@ run: $(EXECUTABLE)
 	./$(EXECUTABLE)
 	@echo "Программа '$(EXECUTABLE)' завершена."
 
+#Нет выделения памяти, проверять нет смысла
 # valgrind: $(EXECUTABLE)
 # 	valgrind $(VALGRINDFLAGS) ./$(EXECUTABLE)
 
