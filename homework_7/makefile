@@ -9,9 +9,12 @@ LIB_DIR = lib
 SOURCES = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 
-LIB_NAME = libcalc.a #Имя библиотеки
-LIB_SHORT_NAME = $(patsubst lib%,%,$(basename $(LIB_NAME))) #Короткое имя библиотеки для -l
-LIB_OBJECTS = $(filter-out $(OBJ_DIR)/main.o, $(OBJECTS)) #Берём все исходные файлы кроме main.c
+# Имя библиотеки
+LIB_NAME = libcalc.a 
+# Короткое имя библиотеки для -l
+LIB_SHORT_NAME = $(patsubst lib%,%,$(basename $(LIB_NAME))) 
+# Берём все исходные файлы кроме main.c
+LIB_OBJECTS = $(filter-out $(OBJ_DIR)/main.o, $(OBJECTS)) 
 
 EXECUTABLE = runner
 
