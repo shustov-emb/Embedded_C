@@ -30,6 +30,7 @@ x86/
 [Aa][Rr][Mm]64[Ee][Cc]/
 bld/
 [Oo]bj/
+[Bb]in/
 [Oo]ut/
 [Ll]og/
 [Ll]ogs/
@@ -422,4 +423,3 @@ FodyWeavers.xsd
 test/
 *s_test*
 *.pdf
-bin/
