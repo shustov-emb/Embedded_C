@@ -423,3 +423,4 @@ FodyWeavers.xsd
 test/
 *s_test*
 *.pdf
+*output*
