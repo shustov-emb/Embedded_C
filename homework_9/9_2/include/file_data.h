@@ -19,7 +19,7 @@
 typedef struct FileData{
     char name[1024];    // Имя файла/папки
     long size;          // Размер файла/папки
-    bool is_dir;         // isDir == 1 - папка, isDir == 1 - файл
+    bool is_dir;        // is_dir == 1 - папка, is_dir == 0 - файл
 } FileData;
 
 #endif //FILE_DATA_H
