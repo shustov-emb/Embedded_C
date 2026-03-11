@@ -422,5 +422,6 @@ FodyWeavers.xsd
 #Custom
 test/
 *s_test*
+*_test*
 *.pdf
 *output*
