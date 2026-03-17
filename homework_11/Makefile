@@ -5,7 +5,7 @@ SRC_DIR     = src
 OBJ_DIR     = obj
 BIN_DIR     = bin
 EXECUTABLE  = $(BIN_DIR)/run
-VALGRINDFLAGS = --leak-check=full --track-origins=yes --show-leak-kinds=all --tool=helgrind
+VALGRINDFLAGS = --leak-check=full --track-origins=yes --show-leak-kinds=all
 HELGRINDFLAGS = --tool=helgrind
 
 SRCS        = $(wildcard $(SRC_DIR)/*.c)

@@ -59,11 +59,11 @@ void *BuyGoods(void *arg)
 
             if (!pthread_mutex_trylock(&locks[i]))
             {
-                printf("thread %d, locks store %ld (demand %d, supply %d)\n", thread_id, i,customer_demand[thread_id],store_supply[i]);
+                printf("Customer %d (%d)\t| store %ld (%d)\t\t| ENTER\n", thread_id, customer_demand[thread_id], i, store_supply[i]);
 
                 if (store_supply[i] <= 0)
                 {
-                    printf("\t thread %d, CONTINUE store %ld (demand %d, supply %d)\n", thread_id, i,customer_demand[thread_id],store_supply[i]);
+                    printf("Customer %d (%d)\t| store %ld (%d)\t\t| LEAVE, STORE EMPTY\n", thread_id, customer_demand[thread_id], i, store_supply[i]);
                     pthread_mutex_unlock(&locks[i]);
                     continue;
                 }
@@ -72,37 +72,44 @@ void *BuyGoods(void *arg)
                 {
                     customer_demand[thread_id] -= store_supply[i];
                     store_supply[i] = 0;
-                    printf("\t thread %d, BUYS store %ld (demand %d, supply %d)\n", thread_id, i,customer_demand[thread_id],store_supply[i]);
-                    // printf("\tBought: Customer %d - demand %d | store %ld - supply %d\n",
-                        //    thread_id, customer_demand[thread_id], i, store_supply[i]);
-                    //fflush(stdout);
+                    printf("Customer %d (%d)\t| store %ld (%d)\t\t| ___BUY\n", thread_id, customer_demand[thread_id], i, store_supply[i]);
+                    // printf("\t thread %d, BUYS store %ld (demand %d, supply %d)\n", thread_id, i, customer_demand[thread_id], store_supply[i]);
+                    //  printf("\tBought: Customer %d - demand %d | store %ld - supply %d\n",
+                    //     thread_id, customer_demand[thread_id], i, store_supply[i]);
+                    //  fflush(stdout);
+                    printf("Customer %d (%d)\t| store %ld (%d)\t\t| LEAVE STORE\n", thread_id, customer_demand[thread_id], i, store_supply[i]);
+                    // printf("\t thread %d, UNLOCKS store %ld (demand %d, supply %d)\n", thread_id, i, customer_demand[thread_id], store_supply[i]);
+                    pthread_mutex_unlock(&locks[i]);
                 }
                 else
                 {
                     store_supply[i] -= customer_demand[thread_id];
                     customer_demand[thread_id] = 0;
-                    printf("\t thread %d, BUYS store %ld (demand %d, supply %d)\n", thread_id, i,customer_demand[thread_id],store_supply[i]);
-                    // printf("\tBought: Customer %d - demand %d | store %ld - supply %d\n",
-                        //    thread_id, customer_demand[thread_id], i, store_supply[i]);
-                    //fflush(stdout);
-                    printf("\t\t thread %d, EXIT store %ld (demand %d, supply %d)\n", thread_id, i,customer_demand[thread_id],store_supply[i]);
+                    printf("Customer %d (%d)\t| store %ld (%d)\t\t| ___BUY\n", thread_id, customer_demand[thread_id], i, store_supply[i]);
+                    // printf("\t thread %d, BUYS store %ld (demand %d, supply %d)\n", thread_id, i, customer_demand[thread_id], store_supply[i]);
+                    //  printf("\tBought: Customer %d - demand %d | store %ld - supply %d\n",
+                    //     thread_id, customer_demand[thread_id], i, store_supply[i]);
+                    //  fflush(stdout);
+                    printf("Customer %d (%d)\t| store %ld (%d)\t\t| DONE SHOPPING\n", thread_id, customer_demand[thread_id], i, store_supply[i]);
+                    // printf("\t\t thread %d, EXIT store %ld (demand %d, supply %d)\n", thread_id, i, customer_demand[thread_id], store_supply[i]);
                     pthread_mutex_unlock(&locks[i]);
                     return 0;
                 }
-
-                printf("\t thread %d, UNLOCKS store %ld (demand %d, supply %d)\n", thread_id, i,customer_demand[thread_id],store_supply[i]);
-                pthread_mutex_unlock(&locks[i]);
-                break;
-            } 
-            else {
-                //lock
-                printf("thread %d, store %ld is BUSY\n", thread_id, i);
-
+            }
+            else
+            {
+                // lock
+                printf("Customer %d\t\t| store %ld\t\t| x STORE BUSY\n", thread_id, i);
             }
         }
 
         sleep(2);
     }
+}
+
+void cleanup_unlock(void *arg) //TODO 
+{
+    pthread_mutex_unlock((pthread_mutex_t *)arg);
 }
 
 void *LoadShops()
@@ -112,14 +119,17 @@ void *LoadShops()
         int store_to_supply = rand() % 5;
         if (!pthread_mutex_trylock(&locks[store_to_supply]))
         {
-
-            store_supply[store_to_supply] += 200;
-            printf("Loader supplied store %d, succecfully\n", store_to_supply);fflush(stdout);
-            pthread_mutex_unlock(&locks[store_to_supply]);
+            pthread_cleanup_push(cleanup_unlock, &locks[store_to_supply]); //TODO 
+            store_supply[store_to_supply] += 2200;
+            printf("Loader\t\t\t| store %d (%d)\t\t| LOAD SUCCESS\n", store_to_supply, store_supply[store_to_supply]);
+            // fflush(stdout);
+            pthread_cleanup_pop(1); //TODO 
+           // pthread_mutex_unlock(&locks[store_to_supply]);
         }
         else
         {
-            printf("Loader failed to supply store %d, it's busy\n", store_to_supply);fflush(stdout);
+            printf("Loader\t\t\t| store %d\t| LOAD FAIL, STORE BUSY\n", store_to_supply);
+            // fflush(stdout);
         }
         sleep(1);
     }
@@ -141,31 +151,26 @@ void Init()
 
 int main(void)
 {
-
     srand(time(NULL));
 
     Init();
 
-    //
     for (size_t i = 0; i < CUSTOMER_COUNT; i++)
         pthread_create(&threads[i], NULL, BuyGoods, &thread_id[i]);
 
     pthread_create(&threads[CUSTOMER_COUNT], NULL, LoadShops, &thread_id[CUSTOMER_COUNT]);
 
-    // pthread_mutex_trylock(&mutex_1);
-
     for (size_t j = 0; j < CUSTOMER_COUNT; j++)
     {
         pthread_join(threads[j], &status);
-        printf("Customer - %ld fullfiled demand. Exit status %ld\n", j, (long)status);
-        //fflush(stdout);
+        printf("Customer %ld\t\t| FINISHED SHOPPING. Exit status %ld\n", j, (long)status);
+        // fflush(stdout);
     }
 
     pthread_cancel(threads[CUSTOMER_COUNT]);
     pthread_join(threads[CUSTOMER_COUNT], &status);
-    // printf("Loader stopped working. Exit status %d\n",*s);
-    printf("Loader stopped working.\n");
-    //fflush(stdout);
+    printf("LOADING STOPPED\t\t| Loader stopped working.\n");
+    // fflush(stdout);
 
     for (size_t k = 0; k < CUSTOMER_COUNT + 1; k++)
         pthread_mutex_destroy(&locks[k]);
