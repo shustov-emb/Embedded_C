@@ -20,19 +20,19 @@
 #include <sys/wait.h>
 
 /**
- * @brief 
+ * @brief Структура команды
  * 
  */
 typedef struct Command
 {
-    char **argv;
-    size_t capacity;
+    char **argv;     //Массив параметров
+    size_t capacity; //Сколько параметров можно передать, чем больше тем больше выделяется памяти
 } Command;
 
 /**
- * @brief 
+ * @brief Функция для считывания пользовательского ввода, с выделением памяти
  * 
- * @return char* 
+ * @return char* Возвращает строку введённую пользователем
  */
 char *ReadString()
 {
@@ -73,11 +73,11 @@ char *ReadString()
 }
 
 /**
- * @brief Get the Command object
+ * @brief Получаем команду
  * 
- * @param command 
- * @param user_data 
- * @return int 
+ * @param [out] command Возвращаем структуру команды,
+ * @param [in] user_data Данные пользователя для парсинга 
+ * @return -1 - Ошибка, 0 - Штатное завршение функции
  */
 int GetCommand(Command *command, char *user_data)
 {
