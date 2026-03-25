@@ -1,37 +1,47 @@
-CC          = gcc
-CFLAGS      = -Wall -Wextra -Werror -g
-LDFLAGS     = -lncurses
-SRC_DIR     = src
-OBJ_DIR     = obj
-BIN_DIR     = bin
-EXECUTABLE  = $(BIN_DIR)/run
-VALGRINDFLAGS = --leak-check=full --track-origins=yes --show-leak-kinds=all
-HELGRINDFLAGS = --tool=helgrind
+CC          	= gcc
+CFLAGS      	= -Wall -Wextra -Werror -g
+LDFLAGS     	= 
+SRC_DIR     	= src
+OBJ_DIR     	= obj
+BIN_DIR     	= bin
+VALGRINDFLAGS 	= --leak-check=full --track-origins=yes --show-leak-kinds=all
+HELGRINDFLAGS 	= --tool=helgrind
+RUN_ARGS      	= 
+SRCS        	= $(wildcard $(SRC_DIR)/*.c)
+BINS        	= $(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%, $(SRCS))
+PROG        	?= mutex
+TIME          	= /bin/time
+TIME_FLAGS    	= -v 
 
-SRCS        = $(wildcard $(SRC_DIR)/*.c)
-OBJS        = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+all: $(BINS)
 
-all: $(EXECUTABLE)
-
-$(EXECUTABLE): $(OBJS)
+$(BIN_DIR)/%: $(OBJ_DIR)/%.o
 	@mkdir -p $(BIN_DIR)
-	$(CC) $(OBJS) $(LDFLAGS) -o $@
+	$(CC) $< $(LDFLAGS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-run: $(EXECUTABLE)
-	./$(EXECUTABLE) $(RUN_ARGS)
-	@echo "Программа '$(EXECUTABLE)' завершена."
+run: $(BIN_DIR)/$(PROG)
+	$(TIME) $(TIME_FLAGS) ./$(BIN_DIR)/$(PROG) $(RUN_ARGS)
 
-valgrind: $(EXECUTABLE)
-	valgrind $(VALGRINDFLAGS) ./$(EXECUTABLE)
+valgrind: $(BIN_DIR)/$(PROG)
+	$(TIME) valgrind $(VALGRINDFLAGS) ./$(BIN_DIR)/$(PROG)
 
-helgrind: $(EXECUTABLE)
-	valgrind $(HELGRINDFLAGS) ./$(EXECUTABLE)
+helgrind: $(BIN_DIR)/$(PROG)
+	$(TIME) valgrind $(HELGRINDFLAGS) ./$(BIN_DIR)/$(PROG)
+
+m_run:
+	$(MAKE) run PROG=mutex
+
+s_run:
+	$(MAKE) run PROG=spinlock
 
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR) output.txt
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all clean run valgrind 
+.PHONY: all clean run valgrind helgrind
+
+
+
