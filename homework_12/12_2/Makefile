@@ -32,10 +32,10 @@ valgrind: $(BIN_DIR)/$(PROG)
 helgrind: $(BIN_DIR)/$(PROG)
 	$(TIME) valgrind $(HELGRINDFLAGS) ./$(BIN_DIR)/$(PROG)
 
-c_run:
+client:
 	$(MAKE) run PROG=client
 
-s_run:
+server:
 	$(MAKE) run PROG=server
 
 clean:

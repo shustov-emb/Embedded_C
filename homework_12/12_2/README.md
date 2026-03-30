@@ -8,10 +8,17 @@
 
 Для управления проектом используйте следующие команды `make`:
 
-*   **`make`**          — Сборка проекта. Компилирует объектные файлы и собирает исполняемый файл `run`.
-*   **`make run`**      — Компиляция и автоматический запуск программы.
-*   **`make valgrind`** — Запускает программу с valgrind.
-*   **`make clean`**    — Очистка: удаляет директории `obj/`, `lib/`, `bin/` вместе с исполняемым файлом `bin/run`
+*   **`make`**                  — Сборка проекта. Компилирует объектные файлы и собирает исполняемый файл `run`.
+*   **`make run`**              — Компиляция и автоматический запуск c mutex.
+*   **`make client/server`**      — Компиляция и автоматический запуск програму mutex/spinlock. 
+    (пример `make server`)
+*   **`make valgrind prog=client/server`** — Запускает программу mutex/spinlock с valgrind 
+    (пример `make valgrind prog=client`).
+*   **`make helgrind prog=client/server`** — Запускает программу mutex/spinlock с helgrind. 
+    (пример `make helgrind prog=server`)
+*   **`make clean`**    — Очистка: удаляет директории `obj/`, `bin/` вместе с исполняемым файлом `bin/run`
+
+
 
 ## Структура проекта
 
