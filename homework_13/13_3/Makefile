@@ -1,33 +1,51 @@
-CC          = gcc
-CFLAGS      = -g -Wall -Wextra -Werror -I./include
-LDFLAGS     = 
-SRC_DIR     = src
-OBJ_DIR     = obj
-BIN_DIR     = bin
-RUN_ARGS    = 
-EXECUTABLE  = $(BIN_DIR)/run
-VALGRINDFLAGS = --leak-check=full --track-origins=yes --show-leak-kinds=all -s
+CC          	= gcc
+CFLAGS      	= -Wall -Wextra -Werror -I./include -D_POSIX_C_SOURCE=200809L -pthread -g
+LDFLAGS     	= -pthread -lrt
+NCURSES     	= -lncurses
+SRC_DIR     	= src
+OBJ_DIR     	= obj
+BIN_DIR     	= bin
+VALGRINDFLAGS 	= --leak-check=full --track-origins=yes --show-leak-kinds=all
+HELGRINDFLAGS 	= --tool=helgrind
+RUN_ARGS      	=
+PROG        	?= server
 
-SRCS        = $(wildcard $(SRC_DIR)/*.c)
-OBJS        = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+CLIENT_OBJS 	= $(OBJ_DIR)/client.o $(OBJ_DIR)/client_ui.o $(OBJ_DIR)/transport_mq.o
+SERVER_OBJS 	= $(OBJ_DIR)/server.o $(OBJ_DIR)/transport_mq.o
+BINS        	= $(BIN_DIR)/client $(BIN_DIR)/server
 
-all: $(EXECUTABLE)
+.SILENT:
 
-$(EXECUTABLE): $(OBJS)
+all: $(BINS)
+
+$(BIN_DIR)/client: $(CLIENT_OBJS)
 	@mkdir -p $(BIN_DIR)
-	$(CC) $(OBJS) $(LDFLAGS) -o $@
+	$(CC) $(CLIENT_OBJS) $(LDFLAGS) $(NCURSES) -o $@
+
+$(BIN_DIR)/server: $(SERVER_OBJS)
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(SERVER_OBJS) $(LDFLAGS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-run: $(EXECUTABLE)
-	./$(EXECUTABLE) $(RUN_ARGS)
+run: $(BIN_DIR)/$(PROG)
+	$(TIME) $(TIME_FLAGS) ./$(BIN_DIR)/$(PROG) $(RUN_ARGS)
 
-valgrind: $(EXECUTABLE)
-	valgrind $(VALGRINDFLAGS) ./$(EXECUTABLE)
+valgrind: $(BIN_DIR)/$(PROG)
+	$(TIME) valgrind $(VALGRINDFLAGS) ./$(BIN_DIR)/$(PROG) $(RUN_ARGS)
+
+helgrind: $(BIN_DIR)/$(PROG)
+	$(TIME) valgrind $(HELGRINDFLAGS) ./$(BIN_DIR)/$(PROG) $(RUN_ARGS)
+
+client:
+	$(MAKE) run PROG=client
+
+server:
+	$(MAKE) run PROG=server
 
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR) output.txt
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all clean run valgrind 
+.PHONY: all clean run valgrind helgrind client server
