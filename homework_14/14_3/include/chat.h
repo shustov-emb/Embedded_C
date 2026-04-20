@@ -1,10 +1,13 @@
 /**
  * @file chat.h
+ * @author Шустов Александр
  * @brief Общие константы и структура сообщения для клиента и сервера
  * @version 0.1
  * @date 2026-04-13
+ * 
+ * @copyright Copyright (c) 2026
+ * 
  */
-
 #ifndef CHAT_H
 #define CHAT_H
 

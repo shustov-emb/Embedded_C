@@ -1,8 +1,12 @@
 /**
  * @file server.c
+ * @author Шустов Александр
  * @brief Серверная часть разделяемой памяти POSIX
  * @version 0.1
  * @date 2026-04-13
+ * 
+ * @copyright Copyright (c) 2026
+ * 
  */
 
 #include <unistd.h>

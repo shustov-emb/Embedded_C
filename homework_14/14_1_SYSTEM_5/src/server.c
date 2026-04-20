@@ -1,10 +1,13 @@
 /**
  * @file server.c
+ * @author Шустов Александр
  * @brief Серверная часть разделяемой памяти на System V
  * @version 0.1
  * @date 2026-04-13
+ * 
+ * @copyright Copyright (c) 2026
+ * 
  */
-
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>

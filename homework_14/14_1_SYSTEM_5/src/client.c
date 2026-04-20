@@ -1,8 +1,12 @@
 /**
  * @file client.c
+ * @author Шустов Александр
  * @brief Клиентская часть разделяемой памяти на System V
  * @version 0.1
  * @date 2026-04-13
+ * 
+ * @copyright Copyright (c) 2026
+ * 
  */
 
 #include <unistd.h>

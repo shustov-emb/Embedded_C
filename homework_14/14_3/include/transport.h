@@ -1,8 +1,12 @@
 /**
  * @file transport.h
+ * @author Шустов Александр
  * @brief Интерфейс транспорта между клиентом и сервером
  * @version 0.1
  * @date 2026-04-13
+ * 
+ * @copyright Copyright (c) 2026
+ * 
  */
 
 #ifndef TRANSPORT_H

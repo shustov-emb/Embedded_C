@@ -1,8 +1,12 @@
 /**
  * @file client_ui.h
+ * @author Шустов Александр
  * @brief Описание интерфейса клиента на ncurses
  * @version 0.1
  * @date 2026-04-13
+ * 
+ * @copyright Copyright (c) 2026
+ * 
  */
 
 #ifndef CLIENT_UI_H

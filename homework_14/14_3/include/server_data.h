@@ -1,8 +1,12 @@
 /**
  * @file server_data.h
+ * @author Шустов Александр
  * @brief Структуры данных, которые использует сервер
  * @version 0.1
  * @date 2026-04-13
+ * 
+ * @copyright Copyright (c) 2026
+ * 
  */
 
 #ifndef SERVER_DATA_H
