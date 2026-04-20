@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2026
  * 
  */
+
 #ifndef CHAT_H
 #define CHAT_H
 
