@@ -425,3 +425,4 @@ test/
 *_test*
 *.pdf
 *output*
+*s_ignore*
