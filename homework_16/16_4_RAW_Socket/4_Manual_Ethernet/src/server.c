@@ -30,7 +30,7 @@ int main(void)
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(9898);
   
-    // Тут мы биндим сервер на прослушку айпи контейнера
+    // Тут мы биндим сервер на прослушку айпи докер контейнера
     if (inet_pton(AF_INET, "172.18.0.2", &server_addr.sin_addr) <= 0)
     {
         perror("inet_pton error");
