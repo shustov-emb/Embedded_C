@@ -230,11 +230,20 @@ int BuildPacket(PacketBuffer *packet, const char *message)
     return 0;
 }
 
+/**
+ * @brief Отправляем пакет на указанный адрес
+ *
+ * @param raw_fd Сокет
+ * @param packet Структура PacketBuffer, в котором есть буфер с заголовками и payload
+ * в котором лежит собранный нами пакет, и его размер
+ * @return int 0 - Успех, -1 - Ошибка
+ */
 int SendPacket(int raw_fd, PacketBuffer *packet)
 {
 
     struct sockaddr_ll addr = {0};
 
+    // ПОлучаем мак адрес получатея
     if (GetBinaryMACFromString(addr.sll_addr, DST_MAC) != 6)
     {
         return -1;
