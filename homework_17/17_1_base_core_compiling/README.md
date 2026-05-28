@@ -19,7 +19,7 @@
 * **`libdwarf-dev`**:  для анализа формата DWARF. (особо не разбирался, но при компиляции часто краснил)
 ![](dwarf.png)
 
-
+Листинг команд:
 ```bash
 sudo apt update
 sudo apt install -y git build-essential libncurses-dev bison flex libssl-dev libelf-dev bc libdw-dev libdwarf-dev
@@ -45,6 +45,12 @@ git clone --depth 1 https://github.com/torvalds/linux.git
 <br>Но если в словах - при установке у меня стояла галочка `LVM` - слой абстракции между диском и файловой системы и без включенного `CONFIG_OVERLAY_FS` компиляция выдавала предупреждение, а при загрузке в ядро писалась ошибка что-то вроде `dracut-initqueue timeout` и потом выкидывало в `emergency mode`, решалось это включенным в конфиг `overlay fs`
 ![](overlay_fs.png)
 
+Листинг команд:
+```bash
+make localmodconfig
+make menuconfig
+```
+
 **Без LVM - интернет говорит, что ядро напрямую монтирует диск без лишних абстракций, и CONFIG_OVERLAY_FS для ядра больше не нужен.**
 
 ## Итоги
@@ -57,3 +63,11 @@ git clone --depth 1 https://github.com/torvalds/linux.git
 
 После установки:
 <br>![](after_install.png)
+
+
+Листинг команд:
+```bash
+make -j8 bzImage modules
+sudo make modules_install
+sudo make install
+```
