@@ -48,12 +48,12 @@ git clone --depth 1 https://github.com/torvalds/linux.git
 **Без LVM - интернет говорит, что ядро напрямую монтирует диск без лишних абстракций, и CONFIG_OVERLAY_FS для ядра больше не нужен.**
 
 ## Итоги
-И дальше ядро спокойно монтировалось и устанавливалось
-![](image_is_ready.png)
+И дальше ядро спокойно монтировалось и устанавливалось.
+<br>![](image_is_ready.png)
 ![](install_done.png)
 
 До установки второго ядра! 
-![](before_install.png)
+<br>![](before_install.png)
 
 После установки:
-![](after_install.png)
+<br>![](after_install.png)
