@@ -367,5 +367,7 @@ int main(void)
     }
 
     // printf("\n");
+    close(raw_fd);
+
     exit(EXIT_SUCCESS);
 }
