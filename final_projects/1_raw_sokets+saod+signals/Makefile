@@ -1,0 +1,60 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -g
+LDFLAGS =
+
+CLIENT_DIR = client
+CLIENT_SRC_DIR = $(CLIENT_DIR)/src
+CLIENT_INCLUDE_DIR = $(CLIENT_DIR)/include
+CLIENT_OBJ_DIR = $(CLIENT_DIR)/obj
+CLIENT_BIN_DIR = $(CLIENT_DIR)/bin
+CLIENT_SRCS = $(wildcard $(CLIENT_SRC_DIR)/*.c)
+CLIENT_OBJS = $(patsubst $(CLIENT_SRC_DIR)/%.c,$(CLIENT_OBJ_DIR)/%.o,$(CLIENT_SRCS))
+CLIENT_BIN = $(CLIENT_BIN_DIR)/client
+CLIENT_CPPFLAGS = -I$(CLIENT_INCLUDE_DIR)
+CLIENT_LDFLAGS =
+
+SERVER_DIR = server
+SERVER_SRC_DIR = $(SERVER_DIR)/src
+SERVER_INCLUDE_DIR = $(SERVER_DIR)/include
+SERVER_OBJ_DIR = $(SERVER_DIR)/obj
+SERVER_BIN_DIR = $(SERVER_DIR)/bin
+SERVER_SRCS = $(wildcard $(SERVER_SRC_DIR)/*.c)
+SERVER_OBJS = $(patsubst $(SERVER_SRC_DIR)/%.c,$(SERVER_OBJ_DIR)/%.o,$(SERVER_SRCS))
+SERVER_BIN = $(SERVER_BIN_DIR)/server
+SERVER_CPPFLAGS = -I$(SERVER_INCLUDE_DIR)
+SERVER_LDFLAGS =
+
+.SILENT:
+
+all: client server
+
+client: $(CLIENT_BIN)
+
+server: $(SERVER_BIN)
+
+run_client: $(CLIENT_BIN)
+	./$(CLIENT_BIN)
+
+run_server: $(SERVER_BIN)
+	./$(SERVER_BIN)
+
+$(CLIENT_BIN): $(CLIENT_OBJS)
+	@mkdir -p $(CLIENT_BIN_DIR)
+	$(CC) $(CLIENT_OBJS) $(LDFLAGS) $(CLIENT_LDFLAGS) -o $@
+
+$(SERVER_BIN): $(SERVER_OBJS)
+	@mkdir -p $(SERVER_BIN_DIR)
+	$(CC) $(SERVER_OBJS) $(LDFLAGS) $(SERVER_LDFLAGS) -o $@
+
+$(CLIENT_OBJ_DIR)/%.o: $(CLIENT_SRC_DIR)/%.c
+	@mkdir -p $(CLIENT_OBJ_DIR)
+	$(CC) $(CFLAGS) $(CLIENT_CPPFLAGS) -c $< -o $@
+
+$(SERVER_OBJ_DIR)/%.o: $(SERVER_SRC_DIR)/%.c
+	@mkdir -p $(SERVER_OBJ_DIR)
+	$(CC) $(CFLAGS) $(SERVER_CPPFLAGS) -c $< -o $@
+
+clean:
+	rm -rf $(CLIENT_OBJ_DIR) $(CLIENT_BIN_DIR) $(SERVER_OBJ_DIR) $(SERVER_BIN_DIR)
+
+.PHONY: all client server run_client run_server clean
