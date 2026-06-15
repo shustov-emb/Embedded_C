@@ -11,6 +11,7 @@
 
 // #include <sys/un.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <netinet/ip.h>
 #include <netinet/udp.h>
@@ -22,9 +23,30 @@
 #include <unistd.h>
 #include "server_utils.h"
 
-ClientInfo client_list[MAX_CLIENTS];
+ClientInfo *client_list = NULL;
+size_t client_capacity = 0;
 int raw_fd = -1;
 volatile sig_atomic_t stop_requested = 0;
+
+int InitClientList(void)
+{
+    // Выделяем начальный блок памяти под стартовое количество клиентов
+    client_list = calloc(MAX_CLIENTS, sizeof(ClientInfo));
+    if (client_list == NULL)
+        return -1;
+
+    // Сохраняем текущую ёмкость массива для дальнейшего расширения
+    client_capacity = MAX_CLIENTS;
+    return 0;
+}
+
+void FreeClientList(void)
+{
+    // Освобождаем память и сбрасываем состояние массива
+    free(client_list);
+    client_list = NULL;
+    client_capacity = 0;
+}
 
 void HandleSigint(int signal_number)
 {
@@ -86,7 +108,7 @@ int SendMessage(int raw_fd, struct ClientInfo *client, char *message)
 
 int GetClientIndex(uint32_t client_ip, uint16_t client_port)
 {
-    for (size_t i = 0; i < MAX_CLIENTS; i++)
+    for (size_t i = 0; i < client_capacity; i++)
     {
         // Если порт и ip адрес из параметров совпадают с этими же полями из массива - клиент найден возвращаем индекс
         if (client_list[i].is_used && client_list[i].client_ip == client_ip && client_list[i].client_port == client_port)
@@ -100,7 +122,7 @@ int GetClientIndex(uint32_t client_ip, uint16_t client_port)
 
 int AddNewClient(uint32_t client_ip, uint16_t client_port)
 {
-    for (size_t i = 0; i < MAX_CLIENTS; i++)
+    for (size_t i = 0; i < client_capacity; i++)
     {
         // Записываем данные клиента в первую попашуюся свободную ячейку массива
         if (!client_list[i].is_used)
@@ -113,7 +135,24 @@ int AddNewClient(uint32_t client_ip, uint16_t client_port)
         }
     }
 
-    return -1;
+    // Если свободных ячеек нет - увеличиваем размер массива в два раза
+    size_t old_capacity = client_capacity;
+    size_t new_capacity = client_capacity == 0 ? MAX_CLIENTS : client_capacity * 2;
+    ClientInfo *new_client_list = realloc(client_list, new_capacity * sizeof(ClientInfo));
+    if (new_client_list == NULL)
+        return -1;
+
+    // Обнуляем только новую часть массива, чтобы свободные ячейки были в корректном состоянии
+    memset(new_client_list + old_capacity, 0, (new_capacity - old_capacity) * sizeof(ClientInfo));
+    client_list = new_client_list;
+    client_capacity = new_capacity;
+
+    // Записываем клиента в первую новую свободную ячейку после расширения массива
+    client_list[old_capacity].client_ip = client_ip;
+    client_list[old_capacity].client_port = client_port;
+    client_list[old_capacity].is_used = 1;
+    client_list[old_capacity].msg_count = 0;
+    return (int)old_capacity;
 }
 
 int RemoveClient(uint32_t client_ip, uint16_t client_port)
@@ -212,7 +251,7 @@ void *HandleRecive(void *arg)
                 client_index = AddNewClient(ip_header->saddr, udp_header->source);
                 if (client_index < 0)
                 {
-                    printf("client list is full\n");
+                    printf("failed to add client\n");
                     continue;
                 }
             }

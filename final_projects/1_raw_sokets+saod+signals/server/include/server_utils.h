@@ -11,6 +11,7 @@
 
 #include <arpa/inet.h>
 #include <signal.h>
+#include <stdio.h>
 
 #ifndef SERVER_UTILS_H
 #define SERVER_UTILS_H
@@ -33,7 +34,8 @@ typedef struct ClientInfo
 /**
  * @brief Список подключённых клиентов
  */
-extern ClientInfo client_list[MAX_CLIENTS];
+extern ClientInfo *client_list;
+extern size_t client_capacity;
 extern int raw_fd;
 /**
  * @brief Флаг завершения приложения по сигналу SIGINT
@@ -52,14 +54,14 @@ int SendMessage(int raw_fd, struct ClientInfo *client, char *message);
 /**
  * @brief Получает индекс клиента из массива, ищет клиента по порту и ip адресу в массиве
  *
- * @param client_ip Клиентский ip адресс
- * @param client_port Клиентский порт
+ * @param client_ip ip адресс клиента
+ * @param client_port порт клиента
  * @return int -1 - Ошибка в противном случае возвращаем индекс найденного клиента в массиве
  */
 int GetClientIndex(uint32_t client_ip, uint16_t client_port);
 
 /**
- * @brief Добавляет клиента в клиентский массив
+ * @brief Добавляет клиента в массив клиентов
  *
  * @param client_ip Клиентский ip адресс
  * @param client_port Клиентский порт
@@ -68,13 +70,24 @@ int GetClientIndex(uint32_t client_ip, uint16_t client_port);
 int AddNewClient(uint32_t client_ip, uint16_t client_port);
 
 /**
- * @brief Удаляет клиента из клиентского массива
+ * @brief Удаляет клиента из массива клиентов
  *
  * @param client_ip Клиентский ip адресс
  * @param client_port Клиентский порт
  * @return int 0 - Успех, -1 - Ошибка
  */
 int RemoveClient(uint32_t client_ip, uint16_t client_port);
+
+/**
+ * @brief Выделяет память под массив клиентов
+ * @return int 0 - Успех, -1 - Ошибка
+ */
+int InitClientList(void);
+
+/**
+ * @brief Освобождает память массива клиентов
+ */
+void FreeClientList(void);
 
 /**
  * @brief Инициализирует обработку сигнала SIGINT

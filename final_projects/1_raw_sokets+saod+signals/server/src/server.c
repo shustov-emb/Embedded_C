@@ -1,6 +1,6 @@
 /**
  * @file server.c
- * @author
+ * @author Шустов Александр
  * @brief Точка входа серверного приложения
  * @version 0.1
  * @date 2026-06-10
@@ -32,13 +32,22 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    memset(client_list, 0, sizeof(client_list));
+    // Выделяем память под клиентский массив
+    if (InitClientList() == -1)
+    {
+        perror("InitClientList error");
+        close(raw_fd);
+        exit(EXIT_FAILURE);
+    }
 
     // Создаём поток для обработки пришедших клиентских сообщений
     pthread_t console_thread = {0};
     if (pthread_create(&console_thread, NULL, HandleRecive, NULL) != 0)
     {
         perror("pthread_create error");
+        // Освобождаем ранее выделенную память при ошибке создания потока
+        FreeClientList();
+        close(raw_fd);
         exit(EXIT_FAILURE);
     }
 
@@ -55,6 +64,8 @@ int main(void)
         close(raw_fd);
     // Поток с обработкой сообщений увидит что дескриптор закрыт - завершится. Тут мы его дождёмся и выйдем
     pthread_join(console_thread, NULL);
+    // Освобождаем память массива клиентов
+    FreeClientList();
 
     exit(EXIT_SUCCESS);
 }
